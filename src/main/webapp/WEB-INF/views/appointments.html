@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .topnav {
+            overflow: hidden;
+            background-color: #87CEEB;
+        }
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #0000FF;
+            color: #ddd;
+        }
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #87CEEB;
+            width: 1000px;
+        }
+        th {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #87CEEB;
+            /*width: 100%;*/
+        }
+        form {
+            position: relative;
+            width: 300px;
+            margin: 0 auto;
+        }
+        input, button {
+            border: none;
+            outline: none;
+            border-radius: 3px;
+        }
+        input {
+            width: 100%;
+            height: 42px;
+            background: #87CEEB;
+            padding-left: 15px;
+        }
+        button {
+            height: 26px;
+            width: 26px;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: black;
+            cursor: pointer;
+        }
+        button:before {
+            content: "\f105";
+            color: #ddd;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .form-app {
+            left: 375px;
+        }
+        table.center {
+            margin-left: auto;
+            margin-right: auto;
+            width: 75%;
+        }
+    </style>
+</head>
+<body>
+<div class="topnav">
+    <a href="#home">Home</a>
+    <a class="active" href="/appointments/">Записи</a>
+    <a href="/patients/">Пациенты</a>
+    <a href="/logout">Выход</a>
+</div>
+<p></p>
+<form class="form-app" th:action="@{/appointments/find-by-keyword}" method="get">
+    <input type="text" class="searchTerm" name="keyword" th:value="${keyword}" placeholder="Поиск..."><button type="submit" class="searchButton"><i class="fa fa-search"></i></button>
+</form>
+<table class="center">
+    <thead>
+    <tr>
+        <td>Номер записи</td>
+        <td>Дата</td>
+        <td>Вид услуги</td>
+        <td>Пациент</td>
+        <td>Лечащий врач</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${appointments}">
+        <td><a th:href="@{/appointments/{id}(id = ${order.id})}"
+               th:text="${order.id}"/>
+        </td>
+        <td th:text="${order.date}"/>
+        <td th:text="${order.typeOfMedicalCare.label}"/>
+        <td><a th:href="@{/patients/{id}(id = ${order.patient.id})}"
+               th:text="${order.patient.bio.name + ' ' + order.patient.bio.surname + ' ' + order.patient.bio.middlename}"/>
+        </td>
+        <td th:text="${order.doctor.user.bio.name + ' ' + order.doctor.user.bio.surname + ' ' + order.doctor.user.bio.middlename}"/>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

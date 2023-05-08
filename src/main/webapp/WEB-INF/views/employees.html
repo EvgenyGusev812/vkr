@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .topnav {
+            overflow: hidden;
+            background-color: #87CEEB;
+        }
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a.active {
+            background-color: #0000FF;
+            color: #ddd;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+        }
+        form {
+            position: relative;
+            width: 300px;
+            margin: 0 auto;
+        }
+        input, button {
+            border: none;
+            outline: none;
+            border-radius: 3px;
+        }
+        input {
+            width: 100%;
+            height: 42px;
+            background: #87CEEB;
+            padding-left: 15px;
+        }
+        button {
+            height: 26px;
+            width: 26px;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: black;
+            cursor: pointer;
+        }
+        button:before {
+            content: "\f105";
+            color: #ddd;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            width: 1000px;
+        }
+        th {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            /*width: 100%;*/
+        }
+        .form-new {
+            right: 550px;
+        }
+        .form-del {
+            float: left;
+            color: red;
+            width: 150px;
+        }
+        table.center {
+            margin-left: auto;
+            margin-right: auto;
+            width: 75%;
+        }
+    </style>
+</head>
+<body>
+<div class="topnav">
+    <a href="#home">Home</a>
+    <a class="active" href="/employees/">Профили сотрудников</a>
+    <a href="/appointments/edit/page/1">Записи</a>
+    <a href="/patients/edit/page/1">Пациенты</a>
+    <a href="/med-cares/page/1">Услуги</a>
+    <a href="/reports/">Отчетность</a>
+    <a href="/logout">Выход</a>
+</div>
+<p></p>
+<form  class="form-new" th:method="GET" th:action="@{/employees/{id}(id = -1)}">
+    <input type="submit" value="Новый сотрудник"/>
+</form>
+<table class="center">
+    <thead>
+    <tr>
+        <td>Логин</td>
+        <td>ФИО</td>
+        <td>Должность</td>
+        <td>Номер телефона</td>
+        <td>Действие</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td><a th:href="@{/employees/{id}(id = ${user.id})}"
+               th:text="${user.username}"/>
+        </td>
+        <td th:text="${user.bio.name + ' ' + user.bio.surname + ' ' + user.bio.middlename}"/>
+        <td th:text="${user.roleLabel}"/>
+        <td th:text="${user.bio.phoneNumber}"/>
+        <td>
+            <form class="form-del" th:method="POST" th:action="@{/employees/delete/{id}(id = ${user.id})}">
+                <input type="submit" value="Удалить"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

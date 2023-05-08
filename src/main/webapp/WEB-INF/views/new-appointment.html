@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{assets/select2-develop/dist/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{assets/select2-bootstrap4-theme-master/dist/select2-bootstrap4.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .topnav {
+            overflow: hidden;
+            background-color: #87CEEB;
+        }
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .topnav a.active {
+            background-color: #0000FF;
+            color: #ddd;
+        }
+        * {
+            box-sizing: border-box;
+        }
+
+        input[type=text], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        label {
+            padding: 12px 12px 12px 0;
+            display: inline-block;
+        }
+
+        input[type=submit] {
+            background-color: #04AA6D;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+
+        .container {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        .col-25 {
+            float: left;
+            width: 15%;
+            margin-top: 6px;
+        }
+
+        .col-75 {
+            float: left;
+            width: 50%;
+            margin-top: 6px;
+        }
+
+        /* Clear floats after the columns */
+        .row::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+        @media screen and (max-width: 600px) {
+            .col-25, .col-75, input[type=submit] {
+                width: 100%;
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="topnav">
+    <a href="#home">Home</a>
+    <a href="/employees/">Профили сотрудников</a>
+    <a href="/appointments/edit/page/1">Записи</a>
+    <a href="/patients/edit/page/1">Пациенты</a>
+    <a href="/med-cares/page/1">Услуги</a>
+    <a href="/reports/">Отчетность</a>
+    <a href="/logout">Выход</a>
+</div>
+<p></p>
+<div class="container">
+    <form th:method="POST" th:action="@{/appointments/new/save}" th:object="${appointment}">
+        <div class="row">
+            <div class="col-25">
+                Дата приема:
+            </div>
+            <div class="col-75">
+                <input type="datetime-local" th:field="${appointment.date}" id="date"/>
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-25">
+                Вид услуги:
+            </div>
+            <div class="col-75">
+                <select class="" id="typeOfMedCare" name="typeOfMedCare"
+                        th:field="${appointment.typeOfMedicalCare}" required>
+                    <option th:each="i : ${typeOfMedCare}" th:value="${i.id}" th:text="${i.label}">
+                    </option>
+                </select>
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-25">
+                Пациент:
+            </div>
+            <div class="col-75">
+                <select class="" id="patients" name="patients"
+                        th:field="${appointment.patient}" required>
+                    <option th:each="i : ${patients}" th:value="${i.id}" th:text="${i.label}">
+                    </option>
+                </select>
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-25">
+                Врач:
+            </div>
+            <div class="col-75">
+                <select class="" id="doctors" name="doctors" th:field="${appointment.doctor}" required>
+                    <option th:each="i : ${doctors}" th:value="${i.id}" th:text="${i.label}">
+                    </option>
+                </select>
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-25">
+                <label for="description">Назначение:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" th:field="${appointment.description}" id="description" disabled/>
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            <div class="col-25">
+                <label for="diagnosis">Диагноз:</label>
+            </div>
+            <div class="col-75">
+                <input type="text" th:field="${appointment.diagnosis}" id="diagnosis" disabled/>
+            </div>
+        </div>
+        <div class="row">
+            <input type="submit" value="Сохранить"/>
+        </div>
+    </form>
+</div>
+</body>
+</html>
